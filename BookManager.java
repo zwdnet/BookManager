@@ -1,11 +1,14 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 /**
  *
- * @author ÕÔè¤Ãô
- * µç×ÓÊé¹ÜÀí³ÌĞòÖ÷³ÌĞò
+ * @author èµµç‘œæ•
+ * ç”µå­ä¹¦ç®¡ç†ç¨‹åºä¸»ç¨‹åº
  *
  */
 public class BookManager
@@ -14,19 +17,19 @@ public class BookManager
 	/**
 	 * @param args
 	 */
-	//¼ÇÂ¼Êé¼®ĞÅÏ¢µÄÀà
+	//è®°å½•ä¹¦ç±ä¿¡æ¯çš„ç±»
 	private class BookInformation
 	{
-		public int BookID; //Êé¼®ID
-		public String BookName; //Êé¼®Ãû³Æ
-		public int BookPage; //Êé¼®Ò³Êı
-		public int TypeID; //ÀàĞÍID
-		public String TypeName; //ÀàĞÍÃû³Æ
-		public String Author; //×÷ÕßĞÕÃû
-		public String Translater; //ÒëÕßĞÕÃû
+		public int BookID; //ä¹¦ç±ID
+		public String BookName; //ä¹¦ç±åç§°
+		public int BookPage; //ä¹¦ç±é¡µæ•°
+		public int TypeID; //ç±»å‹ID
+		public String TypeName; //ç±»å‹åç§°
+		public String Author; //ä½œè€…å§“å
+		public String Translater; //è¯‘è€…å§“å
 	}
-	//Ë½ÓĞ·½·¨
-	//Çå³ıÆÁÄ»ĞÅÏ¢
+	//ç§æœ‰æ–¹æ³•
+	//æ¸…é™¤å±å¹•ä¿¡æ¯
 	private void ClearScreen()
 	{
 		for (int i = 0; i < 50; i++)
@@ -34,7 +37,7 @@ public class BookManager
 			System.out.println(" ");
 		}
 	}
-	//»ñÈ¡ÓÃ»§ÊäÈë
+	//è·å–ç”¨æˆ·è¾“å…¥
 	private int GetInput()
 	{
 		int input = 0;
@@ -45,18 +48,18 @@ public class BookManager
 			ClearScreen();
 			if (t > 0)
 			{
-				System.out.println("ÊäÈë´íÎó£¬ÇëÖØĞÂÊäÈë!");
+				System.out.println("è¾“å…¥é”™è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥!");
 			}
 			t++;
-			System.out.println("1.Ôö¼ÓÒ»±¾Êé.................");
-			System.out.println("2.ÅúÁ¿µ¼Èë/µ¼³öÍ¼Êé............");
-			System.out.println("3.É¾³ıÒ»±¾Êé.................");
-			System.out.println("4.É¾³ıËùÓĞÍ¼Êé................");
-			System.out.println("5.ÓÃÊéÃû¼ìË÷.................");
-			System.out.println("6.ÓÃ×÷Õß/ÒëÕß¼ìË÷.............");
-			System.out.println("7.Êä³öÊé¼®×ÜÊı................");
-			System.out.println("8.ÍË³ö.....................");
-			System.out.println("»¶Ó­Ê¹ÓÃ£¡Çë°´ÌáÊ¾ÊäÈëÑ¡Ôñ:");
+			System.out.println("1.å¢åŠ ä¸€æœ¬ä¹¦.................");
+			System.out.println("2.æ‰¹é‡å¯¼å…¥/å¯¼å‡ºå›¾ä¹¦............");
+			System.out.println("3.åˆ é™¤ä¸€æœ¬ä¹¦.................");
+			System.out.println("4.åˆ é™¤æ‰€æœ‰å›¾ä¹¦................");
+			System.out.println("5.ç”¨ä¹¦åæ£€ç´¢.................");
+			System.out.println("6.ç”¨ä½œè€…/è¯‘è€…æ£€ç´¢.............");
+			System.out.println("7.è¾“å‡ºä¹¦ç±æ€»æ•°................");
+			System.out.println("8.é€€å‡º.....................");
+			System.out.println("æ¬¢è¿ä½¿ç”¨ï¼è¯·æŒ‰æç¤ºè¾“å…¥é€‰æ‹©:");
 			try
 			{
 				input = scanner.nextInt();
@@ -72,37 +75,37 @@ public class BookManager
 		}while(true);
 		return input;
 	}
-	//Êä³ö²¢ÇÒ»»ĞĞ
+	//è¾“å‡ºå¹¶ä¸”æ¢è¡Œ
 	private void Writeln(String info) throws IOException
 	{
 		System.out.println(info);
 		System.in.read();
 		System.in.read();
 	}
-	//Êä³öµ«²»»»ĞĞ
+	//è¾“å‡ºä½†ä¸æ¢è¡Œ
 	private void Write(String info) throws IOException
 	{
 		System.out.print(info);
 		System.in.read();
 	}
-	//Ö÷³ÌĞò
+	//ä¸»ç¨‹åº
 	public static void main(String[] args)throws Exception
 	{
 		// TODO Auto-generated method stub
-		int choose = -1; //ÓÃ»§ÊäÈëµÄÑ¡Ïî
+		int choose = -1; //ç”¨æˆ·è¾“å…¥çš„é€‰é¡¹
 		BookManager bookmanager = new BookManager();
 		do
 		{
 			choose = bookmanager.GetInput();
 			if (choose == -1)
 			{
-				System.out.println("ÊäÈë´íÎó£¡ÇëÖØĞÂÊäÈë£¡");
+				System.out.println("è¾“å…¥é”™è¯¯ï¼è¯·é‡æ–°è¾“å…¥ï¼");
 				System.in.read();
 				continue;
 			}
 			if (choose == 8)
 			{
-				System.out.println("³ÌĞò½«½áÊø£¬ÔÙ¼û£¡");
+				System.out.println("ç¨‹åºå°†ç»“æŸï¼Œå†è§ï¼");
 				break;
 			}
 			switch (choose)
@@ -133,7 +136,7 @@ public class BookManager
 			}
 		}while(choose != 8);
 	}
-	//Í³¼ÆÊı¾İ¿âÖĞ¼ÇÂ¼µÄ×ÜÊı
+	//ç»Ÿè®¡æ•°æ®åº“ä¸­è®°å½•çš„æ€»æ•°
 	private void Count()throws Exception
 	{
 		// TODO Auto-generated method stub
@@ -145,36 +148,36 @@ public class BookManager
 			database = new DataBase();
 			database.InitDatabase("book.db");
 			rs = database.RunQuery(query);
-			Writeln("Êı¾İ¿âÖĞµÄÊé¼®¼ÇÂ¼×ÜÊıÎª:" + rs.getInt(1));
+			Writeln("æ•°æ®åº“ä¸­çš„ä¹¦ç±è®°å½•æ€»æ•°ä¸º:" + rs.getInt(1));
 		}
 		catch (Exception e)
 		{
-			Writeln("²éÑ¯Êé¼®×ÜÊı³ö´í£¡ÏêÏ¸ĞÅÏ¢£º" + e.getMessage() +
-					"Çë°´»Ø³µ¼ü¼ÌĞø......");
+			Writeln("æŸ¥è¯¢ä¹¦ç±æ€»æ•°å‡ºé”™ï¼è¯¦ç»†ä¿¡æ¯ï¼š" + e.getMessage() +
+					"è¯·æŒ‰å›è½¦é”®ç»§ç»­......");
 			return;
 		}
 		finally
 		{
 			if (rs != null)
 			{
-				
+
 			}
 			database.CloseDatabase();
 		}
 	}
-	//ÓÃ×÷Õß¡¢ÒëÕßĞÕÃû¼ìË÷Êı¾İ¿â
+	//ç”¨ä½œè€…ã€è¯‘è€…å§“åæ£€ç´¢æ•°æ®åº“
 	private void QueryByAuthor()throws Exception
 	{
 		// TODO Auto-generated method stub
 		String writerName;
-		System.out.print("ÇëÊäÈëÒª²éÕÒµÄ×÷Õß/ÒëÕßĞÕÃû:");
+		System.out.print("è¯·è¾“å…¥è¦æŸ¥æ‰¾çš„ä½œè€…/è¯‘è€…å§“å:");
 		Scanner scanner = new Scanner(System.in);
 		writerName = scanner.next();
 		String querySql = "select book.BookID,book.BookName,book.BookPage,author.Author,author.Translater,type.TypeName"
-				         + " from book,author,type where (author.Author like \"%"
-				         + writerName + "%\" or author.Translater like \"%" + 
-				           writerName + "%\") and author.BookID = book.BookID and "
-				         + "book.TypeID = type.TypeID;";
+				+ " from book,author,type where (author.Author like \"%"
+				+ writerName + "%\" or author.Translater like \"%" +
+				writerName + "%\") and author.BookID = book.BookID and "
+				+ "book.TypeID = type.TypeID;";
 		ResultSet rs = null;
 		DataBase database = null;
 		try
@@ -186,30 +189,30 @@ public class BookManager
 			System.out.println("--------------------------------------");
 			while (rs.next())
 			{
-				System.out.println("-----------" + "µÚ" + (n+1) + "Ïî½á¹û--------------");
-				System.out.println("Êé¼®ID:" + rs.getInt("BookID"));
-				System.out.println("Êé¼®Ãû³Æ:" + rs.getString("BookName"));
-				System.out.println("Êé¼®Ò³Êı:" + rs.getInt("BookPage"));
-				System.out.println("×÷Õß:" + rs.getString("Author"));
-				System.out.println("ÒëÕß:" + rs.getString("Translater"));
-				System.out.println("Êé¼®·ÖÀà:" + rs.getString("TypeName"));
+				System.out.println("-----------" + "ç¬¬" + (n+1) + "é¡¹ç»“æœ--------------");
+				System.out.println("ä¹¦ç±ID:" + rs.getInt("BookID"));
+				System.out.println("ä¹¦ç±åç§°:" + rs.getString("BookName"));
+				System.out.println("ä¹¦ç±é¡µæ•°:" + rs.getInt("BookPage"));
+				System.out.println("ä½œè€…:" + rs.getString("Author"));
+				System.out.println("è¯‘è€…:" + rs.getString("Translater"));
+				System.out.println("ä¹¦ç±åˆ†ç±»:" + rs.getString("TypeName"));
 				n++;
 			}
 			System.out.println("--------------------------------------");
 			if (n == 0)
 			{
-				System.out.println("Ã»ÓĞ½á¹û¡£");
+				System.out.println("æ²¡æœ‰ç»“æœã€‚");
 			}
 			else
 			{
-				System.out.println("¹²ÓĞ" + n + "Ïî½á¹û¡£");
+				System.out.println("å…±æœ‰" + n + "é¡¹ç»“æœã€‚");
 			}
-			Writeln("²éÑ¯½á¹ûÊä³öÍê±Ï£¬°´»Ø³µ¼ü¼ÌĞø......");
+			Writeln("æŸ¥è¯¢ç»“æœè¾“å‡ºå®Œæ¯•ï¼ŒæŒ‰å›è½¦é”®ç»§ç»­......");
 		}
 		catch (Exception e)
 		{
-			Writeln("²éÑ¯Êé¼®ĞÅÏ¢³ö´í£¡ÏêÏ¸ĞÅÏ¢£º" + e.getMessage() +
-			           "Çë°´»Ø³µ¼ü¼ÌĞø......");
+			Writeln("æŸ¥è¯¢ä¹¦ç±ä¿¡æ¯å‡ºé”™ï¼è¯¦ç»†ä¿¡æ¯ï¼š" + e.getMessage() +
+					"è¯·æŒ‰å›è½¦é”®ç»§ç»­......");
 			return;
 		}
 		finally
@@ -221,18 +224,18 @@ public class BookManager
 			database.CloseDatabase();
 		}
 	}
-	//ÓÃÊéÃû²éÑ¯Êé¼®ĞÅÏ¢
+	//ç”¨ä¹¦åæŸ¥è¯¢ä¹¦ç±ä¿¡æ¯
 	private void QueryByName()throws Exception
 	{
 		// TODO Auto-generated method stub
 		String bookName;
-		System.out.print("ÇëÊäÈëÒª²éÕÒµÄÊéÃû:");
+		System.out.print("è¯·è¾“å…¥è¦æŸ¥æ‰¾çš„ä¹¦å:");
 		Scanner scanner = new Scanner(System.in);
 		bookName = scanner.next();
 		String querySql = "select book.BookID,book.BookName,book.BookPage,author.Author,author.Translater,type.TypeName"
-				         + " from book,author,type where book.BookName like \"%"
-				         + bookName + "%\" and author.BookID = book.BookID and "
-				         + "book.TypeID = type.TypeID;";
+				+ " from book,author,type where book.BookName like \"%"
+				+ bookName + "%\" and author.BookID = book.BookID and "
+				+ "book.TypeID = type.TypeID;";
 		ResultSet rs = null;
 		DataBase database = null;
 		try
@@ -244,30 +247,30 @@ public class BookManager
 			System.out.println("--------------------------------------");
 			while (rs.next())
 			{
-				System.out.println("-----------" + "µÚ" + (n+1) + "Ïî½á¹û--------------");
-				System.out.println("Êé¼®ID:" + rs.getInt("BookID"));
-				System.out.println("Êé¼®Ãû³Æ:" + rs.getString("BookName"));
-				System.out.println("Êé¼®Ò³Êı:" + rs.getInt("BookPage"));
-				System.out.println("×÷Õß:" + rs.getString("Author"));
-				System.out.println("ÒëÕß:" + rs.getString("Translater"));
-				System.out.println("Êé¼®·ÖÀà:" + rs.getString("TypeName"));
+				System.out.println("-----------" + "ç¬¬" + (n+1) + "é¡¹ç»“æœ--------------");
+				System.out.println("ä¹¦ç±ID:" + rs.getInt("BookID"));
+				System.out.println("ä¹¦ç±åç§°:" + rs.getString("BookName"));
+				System.out.println("ä¹¦ç±é¡µæ•°:" + rs.getInt("BookPage"));
+				System.out.println("ä½œè€…:" + rs.getString("Author"));
+				System.out.println("è¯‘è€…:" + rs.getString("Translater"));
+				System.out.println("ä¹¦ç±åˆ†ç±»:" + rs.getString("TypeName"));
 				n++;
 			}
 			System.out.println("--------------------------------------");
 			if (n == 0)
 			{
-				System.out.println("Ã»ÓĞ½á¹û¡£");
+				System.out.println("æ²¡æœ‰ç»“æœã€‚");
 			}
 			else
 			{
-				System.out.println("¹²ÓĞ" + n + "Ïî½á¹û¡£");
+				System.out.println("å…±æœ‰" + n + "é¡¹ç»“æœã€‚");
 			}
-			Writeln("²éÑ¯½á¹ûÊä³öÍê±Ï£¬°´»Ø³µ¼ü¼ÌĞø......");
+			Writeln("æŸ¥è¯¢ç»“æœè¾“å‡ºå®Œæ¯•ï¼ŒæŒ‰å›è½¦é”®ç»§ç»­......");
 		}
 		catch (Exception e)
 		{
-			Writeln("²éÑ¯Êé¼®ĞÅÏ¢³ö´í£¡ÏêÏ¸ĞÅÏ¢£º" + e.getMessage() +
-			           "Çë°´»Ø³µ¼ü¼ÌĞø......");
+			Writeln("æŸ¥è¯¢ä¹¦ç±ä¿¡æ¯å‡ºé”™ï¼è¯¦ç»†ä¿¡æ¯ï¼š" + e.getMessage() +
+					"è¯·æŒ‰å›è½¦é”®ç»§ç»­......");
 			return;
 		}
 		finally
@@ -279,25 +282,25 @@ public class BookManager
 			database.CloseDatabase();
 		}
 	}
-	//É¾³ıÊı¾İ¿âÖĞËùÓĞÍ¼ÊéĞÅÏ¢
+	//åˆ é™¤æ•°æ®åº“ä¸­æ‰€æœ‰å›¾ä¹¦ä¿¡æ¯
 	private void DeleteAll()throws Exception
 	{
 		// TODO Auto-generated method stub
 		String ask;
-		System.out.print("ÒªÉ¾³ıÊı¾İ¿âÖĞËùÓĞÊı¾İ£¬È·¶¨Âğ?(Y/N)");
+		System.out.print("è¦åˆ é™¤æ•°æ®åº“ä¸­æ‰€æœ‰æ•°æ®ï¼Œç¡®å®šå—?(Y/N)");
 		Scanner scanner = new Scanner(System.in);
 		ask = scanner.next();
 		if (ask.equalsIgnoreCase("n"))
 		{
-			Writeln("ÓÃ»§·ÅÆú");
+			Writeln("ç”¨æˆ·æ”¾å¼ƒ");
 			return;
 		}
 		if (!ask.equalsIgnoreCase("y"))
 		{
-			Writeln("ÊäÈë´íÎó£¡");
+			Writeln("è¾“å…¥é”™è¯¯ï¼");
 			return;
 		}
-		//É¾³ıÊı¾İ¿âÖĞËùÓĞĞÅÏ¢
+		//åˆ é™¤æ•°æ®åº“ä¸­æ‰€æœ‰ä¿¡æ¯
 		String tableName[] = {"book", "author", "type"};
 		DataBase database = null;
 		try
@@ -310,12 +313,12 @@ public class BookManager
 				int n = database.RunUpdate(sql);
 				if (n == 0)
 				{
-					String info = "É¾³ı" + tableName[i] + "±íÊı¾İÊ§°Ü£¬°´»Ø³µ¼ü¼ÌĞø......";
+					String info = "åˆ é™¤" + tableName[i] + "è¡¨æ•°æ®å¤±è´¥ï¼ŒæŒ‰å›è½¦é”®ç»§ç»­......";
 					System.out.println(info);
 				}
 				else
 				{
-					String info = "³É¹¦É¾³ıÁË" + tableName[i] + "±íµÄ" +  n + "ĞĞÊı¾İ,°´»Ø³µ¼ü¼ÌĞø......";
+					String info = "æˆåŠŸåˆ é™¤äº†" + tableName[i] + "è¡¨çš„" + n + "è¡Œæ•°æ®,æŒ‰å›è½¦é”®ç»§ç»­......";
 					System.out.println(info);
 				}
 				if (i == 2)
@@ -326,8 +329,8 @@ public class BookManager
 		}
 		catch (Exception e)
 		{
-			Writeln("É¾³ıÊé¼®ĞÅÏ¢³ö´í£¡ÏêÏ¸ĞÅÏ¢£º" + e.getMessage() +
-			           "Çë°´»Ø³µ¼ü¼ÌĞø......");
+			Writeln("åˆ é™¤ä¹¦ç±ä¿¡æ¯å‡ºé”™ï¼è¯¦ç»†ä¿¡æ¯ï¼š" + e.getMessage() +
+					"è¯·æŒ‰å›è½¦é”®ç»§ç»­......");
 			return;
 		}
 		finally
@@ -335,17 +338,17 @@ public class BookManager
 			database.CloseDatabase();
 		}
 	}
-	
-	//É¾³ıÒ»±¾ÊéµÄĞÅÏ¢
+
+	//åˆ é™¤ä¸€æœ¬ä¹¦çš„ä¿¡æ¯
 	private void DeleteOne()throws Exception
 	{
 		// TODO Auto-generated method stub
 		String bookName;
-		System.out.println("ÊäÈëÒªÉ¾³ıµÄÊéÃû:");
+		System.out.println("è¾“å…¥è¦åˆ é™¤çš„ä¹¦å:");
 		Scanner scanner = new Scanner(System.in);
 		bookName = scanner.next();
 		String sql = "delete from book where book.BookName = \""
-				     + bookName + "\";";
+				+ bookName + "\";";
 		DataBase database = null;
 		try
 		{
@@ -354,17 +357,17 @@ public class BookManager
 			int n = database.RunUpdate(sql);
 			if (n == 0)
 			{
-				Writeln("É¾³ıÊı¾İÊ§°Ü£¬°´»Ø³µ¼ü¼ÌĞø......");
+				Writeln("åˆ é™¤æ•°æ®å¤±è´¥ï¼ŒæŒ‰å›è½¦é”®ç»§ç»­......");
 			}
 			else
 			{
-				Writeln("³É¹¦É¾³ıÁË" + n + "ĞĞÊı¾İ,°´»Ø³µ¼ü¼ÌĞø......");
+				Writeln("æˆåŠŸåˆ é™¤äº†" + n + "è¡Œæ•°æ®,æŒ‰å›è½¦é”®ç»§ç»­......");
 			}
 		}
 		catch (Exception e)
 		{
-			Writeln("É¾³ıÊé¼®ĞÅÏ¢³ö´í£¡ÏêÏ¸ĞÅÏ¢£º" + e.getMessage() +
-			           "Çë°´»Ø³µ¼ü¼ÌĞø......");
+			Writeln("åˆ é™¤ä¹¦ç±ä¿¡æ¯å‡ºé”™ï¼è¯¦ç»†ä¿¡æ¯ï¼š" + e.getMessage() +
+					"è¯·æŒ‰å›è½¦é”®ç»§ç»­......");
 			return;
 		}
 		finally
@@ -372,20 +375,105 @@ public class BookManager
 			database.CloseDatabase();
 		}
 	}
-	//´ÓÎÄ¼ş²åÈëËùÓĞÍ¼ÊéĞÅÏ¢
-	private void InsertAll()
+	private void debug(String msg, int i)
+	{
+		//System.out.print(msg + "--->");
+		//System.out.println(i);
+	}
+	//ä»æ–‡ä»¶æ’å…¥æ‰€æœ‰å›¾ä¹¦ä¿¡æ¯
+	private void InsertAll()throws Exception
 	{
 		// TODO Auto-generated method stub
-
+		FileReader fr = null;
+		Scanner scanner = null;
+		BufferedReader br = null;
+		try
+		{
+			System.out.println("è¯·è¾“å…¥å«æœ‰è¦å¯¼å…¥çš„ä¹¦ç±ä¿¡æ¯çš„æ–‡ä»¶çš„è·¯å¾„å’Œæ–‡ä»¶åï¼Œç”¨/ä½œä¸ºåˆ†éš”ç¬¦ï¼š");
+			String fileName = null;
+			scanner = new Scanner(System.in);
+			fileName = scanner.next();
+			fr = new FileReader(fileName);
+			br = new BufferedReader(fr);
+			//å°†æ–‡ä»¶å†…å®¹è¯»å…¥å­—ç¬¦ä¸²
+			String[] bookInfoStr = null;
+			StringBuilder InfoStr = new StringBuilder();
+			String str = "";
+			while ((str = br.readLine()) != null)
+			{
+				InfoStr.append(str);
+			}
+			bookInfoStr = InfoStr.toString().split(" ");
+			//å°†å†…å®¹è¾“å…¥æ•°æ®åº“
+			int i = 0;
+			BookInformation bookinfo = new BookInformation();
+			int sum = 0; //ä¿å­˜æ’å…¥æ•°æ®åº“çš„è®°å½•æ€»æ•°
+			while (i < bookInfoStr.length)
+			{
+				debug(bookInfoStr[i], i);
+				bookinfo.BookID = Integer.parseInt(bookInfoStr[i++]);
+				debug(bookInfoStr[i], i);
+				bookinfo.BookName = bookInfoStr[i++];
+				debug(bookInfoStr[i], i);
+				bookinfo.BookPage = Integer.parseInt(bookInfoStr[i++]);
+				debug(bookInfoStr[i], i);
+				bookinfo.TypeID = Integer.parseInt(bookInfoStr[i++]);
+				debug(bookInfoStr[i], i);
+				bookinfo.TypeName = bookInfoStr[i++];
+				debug(bookInfoStr[i], i);
+				bookinfo.Author = bookInfoStr[i++];
+				debug(bookInfoStr[i], i);
+				bookinfo.Translater = bookInfoStr[i++];
+				//æ’å…¥æ•°æ®åº“çš„æ“ä½œ
+				try
+				{
+				//æ’å…¥bookè¡¨
+				String sql = "insert into book values(" + bookinfo.BookID + ",\"" +
+						bookinfo.BookName + "\"," + bookinfo.BookPage + "," +
+						bookinfo.TypeID + ")";
+				sum += InsertDatabase(sql);
+				//æ’å…¥typeè¡¨
+				sql = "insert into type values(" + bookinfo.TypeID + ",\"" + bookinfo.TypeName + "\")";
+				InsertDatabase(sql);
+				//æ’å…¥authorè¡¨
+				sql = "insert into author values(" + bookinfo.BookID + ",\"" + bookinfo.Translater
+						+ "\",\"" + bookinfo.Author + "\")";
+				InsertDatabase(sql);
+				}
+				catch (SQLException e)
+				{
+					System.out.println(e.getMessage());
+				}
+			}
+			Write("æ’å…¥äº†" + sum + "è¡Œæ•°æ®ï¼ŒæŒ‰å›è½¦é”®ç»§ç»­......");
+		}
+		finally
+		{
+			if (fr != null)
+			{
+				fr.close();
+			}
+			//ä¸‹é¢è¿™æ®µå¦‚æœä¸æ³¨é‡Šæ‰ï¼Œè¿è¡Œçš„æ—¶å€™ä¼šæŠ›å‡ºå¼‚å¸¸ï¼Œæ³¨é‡Šæ‰çš„è¯æœ‰èµ„æºæ³„æ¼ã€‚æ±‚è§£ï¼
+			/*
+			if (br != null)
+			{
+				br.close();
+			}
+			if (scanner != null)
+			{
+				scanner.close();
+			}
+			*/
+		}
 	}
-	//²åÈëÒ»±¾ÊéµÄĞÅÏ¢
+	//æ’å…¥ä¸€æœ¬ä¹¦çš„ä¿¡æ¯
 	private void InsertOne()throws Exception
 	{
 		// TODO Auto-generated method stub
 		ClearScreen();
-		System.out.println("²åÈëÒ»±¾ÊéµÄĞÅÏ¢..........");
-		System.out.println("Çë°´ÕÕÒÔÏÂË³ĞòÊäÈë£ºÊé¼®id¡¢ÊéÃû¡¢Êé¼®Ò³Êı¡¢Êé¼®ÀàĞÍid¡¢Êé¼®ÀàĞÍ¡¢×÷Õß¡¢" +
-				"ÒëÕß£¨ÎŞÇëÊäÈë\"NULL\")");
+		System.out.println("æ’å…¥ä¸€æœ¬ä¹¦çš„ä¿¡æ¯..........");
+		System.out.println("è¯·æŒ‰ç…§ä»¥ä¸‹é¡ºåºè¾“å…¥ï¼šä¹¦ç±idã€ä¹¦åã€ä¹¦ç±é¡µæ•°ã€ä¹¦ç±ç±»å‹idã€ä¹¦ç±ç±»å‹ã€ä½œè€…ã€" +
+				"è¯‘è€…ï¼ˆæ— è¯·è¾“å…¥\"NULL\")");
 		BookInformation bookinfo = new BookInformation();
 		Scanner scanner = new Scanner(System.in);
 		bookinfo.BookID = scanner.nextInt();
@@ -397,36 +485,36 @@ public class BookManager
 		bookinfo.Translater = scanner.next();
 		try
 		{
-			//²åÈëbook±í
+			//æ’å…¥bookè¡¨
 			String sql = "insert into book values(" + bookinfo.BookID + ",\"" +
 					bookinfo.BookName + "\"," + bookinfo.BookPage + "," +
 					bookinfo.TypeID + ")";
 			InsertDatabase(sql);
-			//²åÈëtype±í
+			//æ’å…¥typeè¡¨
 			sql = "insert into type values(" + bookinfo.TypeID + ",\"" + bookinfo.TypeName + "\")";
 			InsertDatabase(sql);
-			//²åÈëauthor±í
+			//æ’å…¥authorè¡¨
 			sql = "insert into author values(" + bookinfo.BookID + ",\"" + bookinfo.Translater
 					+ "\",\"" + bookinfo.Author + "\")";
 			int n = InsertDatabase(sql);
 			if (n == 0)
 			{
-				Write("²åÈëÊı¾İ¿âÊ§°Ü!°´»Ø³µ¼ü¼ÌĞø......");
+				Write("æ’å…¥æ•°æ®åº“å¤±è´¥!æŒ‰å›è½¦é”®ç»§ç»­......");
 			}
 			else
 			{
-				Write("²åÈëÁË" + n + "ĞĞÊı¾İ£¬°´»Ø³µ¼ü¼ÌĞø......");
+				Write("æ’å…¥äº†" + n + "è¡Œæ•°æ®ï¼ŒæŒ‰å›è½¦é”®ç»§ç»­......");
 			}
 		}
 		catch (Exception e)
 		{
-			Writeln("²åÈëÊé¼®ĞÅÏ¢³ö´í£¡ÏêÏ¸ĞÅÏ¢£º" + e.getMessage() +
-					           "Çë°´»Ø³µ¼ü¼ÌĞø......");
+			Writeln("æ’å…¥ä¹¦ç±ä¿¡æ¯å‡ºé”™ï¼è¯¦ç»†ä¿¡æ¯ï¼š" + e.getMessage() +
+					"è¯·æŒ‰å›è½¦é”®ç»§ç»­......");
 			return;
 		}
-		Write("²åÈëÊé¼®ĞÅÏ¢³É¹¦£¬°´»Ø³µ¼ü¼ÌĞø......");
+		Write("æ’å…¥ä¹¦ç±ä¿¡æ¯æˆåŠŸï¼ŒæŒ‰å›è½¦é”®ç»§ç»­......");
 	}
-	//Ö´ĞĞÊı¾İ¿â²åÈëÓï¾ä
+	//æ‰§è¡Œæ•°æ®åº“æ’å…¥è¯­å¥
 	private int InsertDatabase(String sql)throws Exception
 	{
 		DataBase database = new DataBase();

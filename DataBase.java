@@ -4,8 +4,8 @@ import org.sqlite.JDBC;
 
 /**
  *
- * @author ÕÔè¤Ãô
- * µç×ÓÊé¹ÜÀí³ÌĞòµÄÊı¾İ¿â´¦ÀíÄ£¿é£¬ÓÃÓÚ½øĞĞsqliteÊı¾İ¿âµÄ²Ù×÷
+ * @author èµµç‘œæ•
+ * ç”µå­ä¹¦ç®¡ç†ç¨‹åºçš„æ•°æ®åº“å¤„ç†æ¨¡å—ï¼Œç”¨äºè¿›è¡Œsqliteæ•°æ®åº“çš„æ“ä½œ
  *
  */
 public class DataBase
@@ -16,31 +16,31 @@ public class DataBase
 	 */
 	private Connection connect;
 	private Statement state;
-	//³õÊ¼»¯Êı¾İ¿â
+	//åˆå§‹åŒ–æ•°æ®åº“
 	public void InitDatabase(String DatabaseName)throws Exception
 	{
 		Class.forName("org.sqlite.JDBC");
 		connect = DriverManager.getConnection("jdbc:sqlite:" + DatabaseName);
 		state = connect.createStatement();
 	}
-	//Ö´ĞĞÊı¾İ¿âµÄ¸üĞÂÓï¾ä
+	//æ‰§è¡Œæ•°æ®åº“çš„æ›´æ–°è¯­å¥
 	public int RunUpdate(String sql)throws Exception
 	{
 		return state.executeUpdate(sql);
 	}
-	//Ö´ĞĞ´´½¨Êı¾İ±íµÄÓï¾ä
+	//æ‰§è¡Œåˆ›å»ºæ•°æ®è¡¨çš„è¯­å¥
 	public void RunCreate(String sql)throws Exception
 	{
 		state.execute(sql);
 	}
-	//Ö´ĞĞ²éÑ¯¯¢
+	//æ‰§è¡ŒæŸ¥è¯¢î‡—
 	public ResultSet RunQuery(String sql)throws Exception
 	{
 		ResultSet rs;
 		rs = state.executeQuery(sql);
 		return rs;
 	}
-	//¹Ø±ÕÊı¾İ¿â
+	//å…³é—­æ•°æ®åº“
 	public void CloseDatabase()throws Exception
 	{
 		if (connect != null)
@@ -49,37 +49,37 @@ public class DataBase
 		}
 	}
 	/*
-	public static void main(String[] args)throws Exception
-	{
-		// TODO Auto-generated method stub
-		DataBase database = null;
-		ResultSet rs = null;
-		try
-		{
-			database = new DataBase();
-			//Class.forName("org.sqlite.JDBC");
-			//Connection conn = DriverManager.getConnection("jdbc:sqlite:aa.db");
-			database.InitDatabase("aa.db");
-			//stat = RunCreate(conn, "create table tbl1(name varchar(20), salary int);");
-			database.RunUpdate("insert into tbl1 values('zhangsan', 8000);");
-			database.RunUpdate("insert into tbl1 values('Lisi', 7800);");
-			rs = database.RunQuery("select * from tbl1");
-			while (rs.next())
-			{
-				System.out.println("name = " + rs.getString("name") + " "
-						           + "salary = " + rs.getShort("salary"));
-			}
-			rs.close();
-			database.CloseDatabase();
-		}
-		finally
-		{
-			if (rs != null)
-			{
-				rs.close();
-			}
-			database.CloseDatabase();
-		}
-	}
-	*/
+public static void main(String[] args)throws Exception
+{
+// TODO Auto-generated method stub
+DataBase database = null;
+ResultSet rs = null;
+try
+{
+database = new DataBase();
+//Class.forName("org.sqlite.JDBC");
+//Connection conn = DriverManager.getConnection("jdbc:sqlite:aa.db");
+database.InitDatabase("aa.db");
+//stat = RunCreate(conn, "create table tbl1(name varchar(20), salary int);");
+database.RunUpdate("insert into tbl1 values('zhangsan', 8000);");
+database.RunUpdate("insert into tbl1 values('Lisi', 7800);");
+rs = database.RunQuery("select * from tbl1");
+while (rs.next())
+{
+System.out.println("name = " + rs.getString("name") + " "
++ "salary = " + rs.getShort("salary"));
+}
+rs.close();
+database.CloseDatabase();
+}
+finally
+{
+if (rs != null)
+{
+rs.close();
+}
+database.CloseDatabase();
+}
+}
+	 */
 }
